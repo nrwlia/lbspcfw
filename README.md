@@ -1,4 +1,4 @@
-# Linux BSP Case Folding Workaround (lbspcfw)
+# Linux BSP Case Folding Workaround for CS:S (daemonized)
 
 #### 🖼️ Before/After
 ![image](https://github.com/user-attachments/assets/e8b1c04d-778d-42bf-83f6-a68c1d446c2d)
@@ -14,13 +14,7 @@ The Linux BSP Case Folding Workaround is a bash script designed to resolve clien
 BSP map files reference assets (e.g., Materials/Walls/brick01.vtf) case-insensitively, which conflicts with Linux case-sensitive filesystem (e.g., materials/walls/brick01.vtf) since the February 2025 update. This script automates bulk asset extraction, merge, and placement to ensure proper map operation.
 
 ## 👨‍💻 Functionality
-- Automatically updates to the latest LBSPCFW and [VPKEdit](https://github.com/craftablescience/VPKEdit/releases) (for asset extraction)
-- Auto-detection of compatible Steam Games (Flatpack & Snap also supported)
-- Extracts custom map assets with vpkeditcli and merges them together with rsync
-- Uses [GNU Parallel](https://github.com/gitGNU/gnu_parallel) for processing all map data, drastically reducing workload time
-- Syncronization can be set to your game folder (auto-detect), or `fix` folder (manually copy contents to game `download` folder)
-- Optionally skip previously processed maps per game using hash fingerprinting for accurate checking (new, changed, same, etc)
-- Automatic configuration preset generation to streamline reprocessing of new/existing map files on a per-game basis
+- I (author of fork) have modified this script to work with **only** CS:S. It is **heavily vibecoded** and I get rid of most of features that original repo had so don't expect anything much from this fork.
 
 ## 🚀 Usage
 ### Prerequisites
@@ -43,38 +37,24 @@ sudo dnf makecache && sudo dnf install curl unzip rsync parallel -y
 ### Installation
 1. Clone:
    ```
-   git clone https://github.com/scorpius2k1/linux-bsp-casefolding-workaround.git
+   git clone https://github.com/nrwlia/lbspcfw.git
    ```
 2. Change to local repo folder
    ```
-   cd linux-bsp-casefolding-workaround
+   cd lbspcfw
    ```
 3. Set permissions:
    ```
-   chmod +x lbspcfw.sh
+   chmod +x install.sh
+   ```
+4. Run install script **as user**:
+   ```
+   ./install.sh
    ```
 Alternatively, clone & run with one command:
 ```
-git clone https://github.com/scorpius2k1/linux-bsp-casefolding-workaround.git && cd linux-bsp-casefolding-workaround && chmod +x lbspcfw.sh && ./lbspcfw.sh
+git clone https://github.com/nrwlia/lbspcfw.git && cd lbspcfw && chmod +x install.sh && ./install.sh
 ```
-
-### Execution
-- Auto-detect:
-  - Run `./lbspcfw.sh` (select **Y** to auto detect, choose game)
-  - If you do not see your game in the list, please proceed with the manual method
-  - Maps already in your game folder `download/maps` are used, negating the need to copy map files
-- Manual:
-  - Create a `bsp` folder in the same folder as the script
-  - Copy desired map files (bsp) into the `bsp` folder
-  - Run `./lbspcfw.sh` (select **N** to auto detect)
-  - Once the script has finished, move the contents of `fix` into game `download` folder<br/>(e.g., ../steamapps/common/Half-Life 2 Deathmatch/hl2mp/download/)
-- Presets:
-  - Configuration presets are automatically generated after first processing, on a per-game basis
-  - To use a preset, run the script normally and answer **Y** to the `Use configuration preset? [Y/n]` prompt and choose the desired game to reprocess
-  - Alternatively, the `--config` parameter can also be passed as a command line argument `./lbspcfw.sh --config` to skip directly to the preset menu
-
-#### ** Map files are **not altered** in any way, data is only extracted from them **
-![Screenshot from 2025-03-08 10-50-46](https://github.com/user-attachments/assets/80e46bdb-a529-4859-9e6d-d646daace166)
 
 ## ⚠️ Backup Warning
 To work properly, all assets (materials, models, sound) extracted are **required** to be inside the game download folder (alternatively, they can be placed in the game root folder). Placing custom assets into the `custom` folder does not work since it seems to suffer the same case folding issue. This is due to the functionality of the game itself, _not_ the script. If you require any existing custom content to be retained, please back up your existing materials/models/sound folders **_prior_** to running this script.
@@ -83,11 +63,14 @@ To work properly, all assets (materials, models, sound) extracted are **required
 Multiple maps that use the same texture/model naming scheme but different versions can potentially [conflict with eachother](https://github.com/scorpius2k1/linux-bsp-casefolding-workaround/issues/7), causing them not to render properly. While rare, this is difficult to address directly since the way Valve's Source1 engine processes external data cumulatively (no per-map option), making it implausible to address via a workaround such as this script.
 
 ## 🗑 Removal
-- Navigate to your game `download` folder and remove `materials` `models` `sound` folders. If you retained any backups of these folders, be sure to restore them there afterwards. Once done, restart the game.
+- Run uninstall script:
+  ```bash
+  ./uninstall.sh
+  ```
 
 ## 👥 Support
 - A ticket for this issue is open on Valve's official Github, please [follow there](https://github.com/ValveSoftware/Source-1-Games/issues/6868) for updated information.
 - If you find this useful and it works well for you, please ⭐ this repository and share with others in the community.
-- If you would like to support my work and [servers](https://stats.scorpex.org/) I run in the community, consider [buying a coffee](https://help.scorpex.org/) ☕
-  
+- If you would like to support author's work and [servers](https://stats.scorpex.org/) he run in the community, consider [buying him a coffee](https://help.scorpex.org/) ☕
+
 [Back to top](#top)
